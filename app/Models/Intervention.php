@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Auth;
 
 class Intervention extends Model
 {
@@ -34,6 +35,29 @@ class Intervention extends Model
         }
 
         return $query;
+    }
+
+    public static function getDurationForMonthForUser(Carbon $date, ?User $user = null) : array
+    {
+        $user ??= auth()->user();
+
+        $interventions = self::where('user_id', $user->id)
+            ->whereMonth('date', $date->month)
+            ->whereYear('date', $date->year)
+            ->get(['start_time', 'end_time']);
+
+        $totalSeconds = 0;
+
+        foreach ($interventions as $intervention) {
+            $start = Carbon::parse($intervention->start_time);
+            $end = Carbon::parse($intervention->end_time);
+            $totalSeconds += $start->diffInSeconds($end);
+        }
+
+        return [
+            'h' => (int) ($totalSeconds / 3600),
+            'm' => (int) (($totalSeconds % 3600) / 60),
+        ];
     }
 
     public static function getInterventionDaysByMonthAndYear(Carbon $date, Company $company)

@@ -30,7 +30,7 @@
 
                     <div class="d-flex align-items-center justify-content-between mt-3">
                         <div class="mt-3 form-check">
-                            <x-form.input id="checkDefault" type="checkbox" class="form-check-input" name="remember" />
+                            <x-form.input id="checkDefault" type="checkbox" class="form-check-input" :value="true" name="remember" />
                             <x-form.label class="form-check-label" for="checkDefault" :value="__('auth.remember_me')" />
                         </div>
                         <x-button class="px-5" color="primary">{{ __('auth.log_in') }}</x-button>

@@ -123,7 +123,7 @@
                     <td class="text-{{ $textColor }}">
                         {{ Carbon::parse($task->scheduled_date)->format('d.m.Y') ?? 'N/A' }}
                     </td>
-                    <td class="text-success">
+                    <td class="text-{{ Carbon::parse($task->completed_date)->greaterThan($task->scheduled_date) ? 'danger' : 'success' }}">
                         {{  $task->status === Task::STATUS_COMPLETED ? Carbon::parse($task->completed_date)->format('d.m.Y H:i') : '' }}
                     </td>
                     <td>
